@@ -41,7 +41,7 @@ def process_recording(recording_path, save_folder):
     # rename_frames_folder(save_folder / movie_name / 'frames/')
     
 class RNNModule(torch.nn.Module):
-    def __init__(self, device, n_inputs, n_hidden, nonlinearity, input_bias=True, hidden_bias=True):
+    def __init__(self, n_inputs, n_hidden, nonlinearity, device, input_bias=True, hidden_bias=True):
         super(RNNModule, self).__init__()
 
         self.rnn_cell = RNNCell(n_inputs, n_hidden, nonlinearity, input_bias, hidden_bias)
