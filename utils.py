@@ -1,27 +1,10 @@
 import cv2
-from moviepy.editor import VideoFileClip
 import os
-import argparse
 import pathlib
 import torch
-import torch.nn.functional as F
 
     
 def process_recording(recording_path, save_folder):
-    
-    def rename_frames_folder(path):
-        RENAME_PATH = pathlib.Path(path)
-        print('Renaming files in:', RENAME_PATH)
-        renamed = 0
-        for file in RENAME_PATH.glob('frame*.jpg'):
-            name_splits = file.stem.split('_')
-            suffix = name_splits[-1]
-            if len(suffix) == 5:
-                suffix = '0' + suffix
-                os.rename(file, RENAME_PATH / f'frame_{suffix}.jpg')
-                renamed += 1
-
-        print('Renamed', renamed, 'files.')
 
     def split_video_into_frames(video_path, output_folder):
 
@@ -45,19 +28,7 @@ def process_recording(recording_path, save_folder):
         # Release the video capture object
         cap.release()
         print(f"Total frames extracted: {frame_count}")
-
-    def extract_audio_in_stereo(video_path, output_audio_path):
-        # Load the video file
-        if isinstance(video_path, pathlib.Path):
-            video_path = str(pathlib.PurePath(video_path))
-        clip = VideoFileClip(video_path)
-        
-        # Extract audio
-        audio = clip.audio
-        audio.write_audiofile(output_audio_path, codec='mp3', ffmpeg_params=["-ac", "2"])  # Ensure 2 channels for stereo
-
-        # Close the clip
-        clip.close()
+    
     movie_name = recording_path.stem
     if not os.path.exists(save_folder / movie_name):
         frames_folder = save_folder / movie_name / 'frames'
