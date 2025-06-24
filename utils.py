@@ -51,3 +51,61 @@ class RNNCell(torch.nn.Module):
         igates = self.in2hidden(x)
         hgates = self.hidden2hidden(hidden)
         return self.activation_fn(igates + hgates)
+
+def test_rnn_epoch(rnn, dataloader, loss_fn, stepwise=True, device=torch.device('cuda')):
+    '''
+    Test the RNN for one epoch on the given dataloader.
+    Args:
+        rnn: the RNN model to test
+        dataloader: the dataloader containing the test data
+        loss_fn: the loss function to use for evaluation
+        stepwise: if True, evaluate the RNN step by step, otherwise evaluate the whole sequence at once.
+                  if False, hidden states and other information will only be recorded for the last time step
+        device: the device to use for computation (default: cuda)
+    Returns:
+        test_dict: a dictionary containing the test results, including losses, hidden states, positions,
+                     head directions, angles, outputs, and output labels
+    '''
+    rnn.eval()
+    test_dict = {'batch_losses':[], 'h_ts':[], 'pos':[], 'hds':[], 'thetas':[], 'outputs':[], 'outputs_label':[]}
+    with torch.no_grad():
+        h_t = None
+        for i, data in enumerate(dataloader):
+            embs, vels, rot_vels, pos, hds, thetas, embs_labels = data
+            
+            inputs = torch.cat((embs.squeeze(dim=0).to(device), vels.squeeze(dim=0)[:,0,...].to(device), rot_vels.squeeze(dim=0)[:,0,...].to(device)), dim=-1)
+            if stepwise:
+                for step in range(inputs.shape[1]):
+                    outputs, h_t = rnn.forward(inputs[:, step, ...][:,None,:], hidden=h_t)   # index at step 0, keep dim
+
+                    labels = embs_labels.squeeze(dim=0)[:,:,step,...].to(device)
+                    assert labels.shape == outputs.shape, f"Labels shape {labels.shape} and outputs shape {outputs.shape} do not match"
+                    loss = loss_fn(outputs, labels)
+
+                    test_dict['loss'].append(loss.item())
+                    
+                    test_dict['h_ts'].append(h_t.detach().cpu().numpy())                           # (fps, hidden_dim)
+                    test_dict['pos'].append(pos.detach()[0,:,0,step,...].cpu().numpy())                # (fps, 2)
+                    test_dict['hds'].append(hds.detach()[0,:,0,step,...].cpu().numpy())                # (fps, 2)
+                    test_dict['thetas'].append(thetas.detach()[0,:,0,step,...].cpu().numpy())          # (fps, 1)
+                    test_dict['outputs'].append(outputs.detach().cpu().numpy())            # (fps, emb_dim)
+                    test_dict['outputs_label'].append(labels.detach().cpu().numpy())
+            else:
+                outputs, h_t = rnn.forward(inputs, hidden=h_t)
+                
+                labels = embs_labels.squeeze(dim=(0,2)).to(device)
+                assert labels.shape[0] == outputs.shape[0], f"Labels shape {labels.shape} and outputs shape {outputs.shape} do not match"
+                loss = loss_fn(outputs, labels)
+
+                test_dict['loss'].append(loss.item())
+                
+                test_dict['h_ts'].append(h_t.detach().cpu().numpy())                           # (fps, hidden_dim)
+                test_dict['pos'].append(pos.detach()[0,:,0,-1,:].cpu().numpy())                # (fps, 2)
+                test_dict['hds'].append(hds.detach()[0,:,0,-1,:].cpu().numpy())                # (fps, 2)
+                test_dict['thetas'].append(thetas.detach()[0,:,0,-1,:].cpu().numpy())          # (fps, 1)
+                test_dict['outputs'].append(outputs.detach()[:,-1,:].cpu().numpy())            # (fps, emb_dim)
+                test_dict['outputs_label'].append(labels.detach()[:,-1,:].cpu().numpy())
+                
+        test_dict['loss_avg'] = np.mean(test_dict['loss'])
+    
+    return test_dict
