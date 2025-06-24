@@ -1,45 +1,6 @@
-import cv2
-import os
-import pathlib
 import torch
 
-    
-def process_recording(recording_path, save_folder):
-
-    def split_video_into_frames(video_path, output_folder):
-
-        # Initialize the video capture
-        if isinstance(video_path, pathlib.Path):
-            video_path = str(pathlib.PurePath(video_path))
-        cap = cv2.VideoCapture(video_path)
-        frame_count = 0
-
-        while True:
-            # Read frame by frame
-            ret, frame = cap.read()
-            if not ret:
-                break  # Break the loop if there are no frames left
-
-            # Save each frame as an image
-            frame_filename = os.path.join(output_folder, f"frame_{frame_count:05d}.jpg")
-            cv2.imwrite(frame_filename, frame)
-            frame_count += 1
-
-        # Release the video capture object
-        cap.release()
-        print(f"Total frames extracted: {frame_count}")
-    
-    movie_name = recording_path.stem
-    if not os.path.exists(save_folder / movie_name):
-        frames_folder = save_folder / movie_name / 'frames'
-        frames_folder.mkdir(parents=True, exist_ok=False)
-        audio_folder = save_folder / movie_name / 'audio'
-        audio_folder.mkdir(parents=True, exist_ok=False)
-    
-    split_video_into_frames(recording_path, save_folder / movie_name / "frames/")
-    # extract_audio_in_stereo(recording_path, save_folder / movie_name / 'audio/audio.mp3')
-    # rename_frames_folder(save_folder / movie_name / 'frames/')
-    
+ 
 class RNNModule(torch.nn.Module):
     def __init__(self, n_inputs, n_hidden, nonlinearity, device, input_bias=True, hidden_bias=True):
         super(RNNModule, self).__init__()
