@@ -1,9 +1,9 @@
 import torch
 import numpy as np
 
-class VisualEncoder(torch.nn.Module):
+class VisionEncoder(torch.nn.Module):
     def __init__(self,
-        visual_embedding_dim, img_dim, grayscale,
+        vision_embedding_dim, img_dim, grayscale,
         kernel_sizes: list[tuple[int]] = [(4,5)],
         kernel_strides: list[int] = [3],
         channels: list[int] = [8],
@@ -44,7 +44,7 @@ class VisualEncoder(torch.nn.Module):
         self.flatten = torch.nn.Flatten(start_dim=1)
 
         self.encoder_lin = torch.nn.Sequential(
-            torch.nn.Linear(channels[-1]*np.prod(img_dim_out), visual_embedding_dim),
+            torch.nn.Linear(channels[-1]*np.prod(img_dim_out), vision_embedding_dim),
             torch.nn.Sigmoid()
         )
         print(f'Encoder linear layer: {self.encoder_lin}')
@@ -58,9 +58,9 @@ class VisualEncoder(torch.nn.Module):
 
         return embeddings
 
-class VisualDecoder(torch.nn.Module):
+class VisionDecoder(torch.nn.Module):
     def __init__(self,
-        visual_embedding_dim, img_dim_out, grayscale,
+        vision_embedding_dim, img_dim_out, grayscale,
         kernel_sizes: list[tuple[int]] = [(4,5)],
         kernel_strides: list[int] = [3],
         channels: list[int] = [8],
@@ -69,7 +69,7 @@ class VisualDecoder(torch.nn.Module):
 
         inc = 1 if grayscale else 3
 
-        self.decoder_lin = torch.nn.Linear(visual_embedding_dim, channels[-1]*np.prod(img_dim_out))
+        self.decoder_lin = torch.nn.Linear(vision_embedding_dim, channels[-1]*np.prod(img_dim_out))
         print(f'\nDecoder linear layer: {self.decoder_lin}\n')
 
         self.unflatten = torch.nn.Unflatten(

@@ -22,7 +22,7 @@ def evaluate_rnn(
     '''
     rnn.eval()
 
-    d = {
+    dictionary = {
         'batch_losses': [],
         'hidden_states':[],
         'positions':[],
@@ -43,22 +43,23 @@ def evaluate_rnn(
             ), dim=-1)
 
             hidden_all_new = rnn.inputs2hidden(inputs, hidden_state)
-            hidden_new = hidden_all_new[:, -1, :]
+            hidden_state = hidden_all_new[:, -1, :].detach()
+            
             outputs = rnn.hidden2outputs(hidden_all_new)
 
             embs_labels = embs_labels.squeeze(dim=0).to(device)
             batch_losses = loss_fn(outputs, embs_labels)
 
-            d['batch_losses'].append(batch_losses.detach().item())
+            dictionary['batch_losses'].append(batch_losses.detach().item())
             
             if for_ratemaps:
-                d['hidden_states'].append(hidden_all_new.detach().cpu().numpy())                           # (fps, hidden_dim)
-                d['positions'].append(pos.squeeze(dim=0).detach().cpu().numpy())                # (fps, 2)
-                d['head_directions'].append(hds.squeeze(dim=0).detach().cpu().numpy())                # (fps, 2)
-                d['outputs'].append(outputs.detach().cpu().numpy())            # (fps, emb_dim)
-                d['embs_labels'].append(embs_labels.detach().cpu().numpy())
+                dictionary['hidden_states'].append(hidden_all_new.detach().cpu().numpy())                           # (fps, hidden_dim)
+                dictionary['positions'].append(pos.squeeze(dim=0).detach().cpu().numpy())                # (fps, 2)
+                dictionary['head_directions'].append(hds.squeeze(dim=0).detach().cpu().numpy())                # (fps, 2)
+                dictionary['outputs'].append(outputs.detach().cpu().numpy())            # (fps, emb_dim)
+                dictionary['embs_labels'].append(embs_labels.detach().cpu().numpy())
     if for_ratemaps:
         for k in ['hidden_states', 'positions', 'head_directions', 'outputs', 'embs_labels']:
-            d[k] = np.concatenate(d[k], axis=1)
+            dictionary[k] = np.concatenate(dictionary[k], axis=1)
 
-    return d
+    return dictionary
