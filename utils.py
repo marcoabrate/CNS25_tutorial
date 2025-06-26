@@ -63,3 +63,23 @@ def evaluate_rnn(
             dictionary[k] = np.concatenate(dictionary[k], axis=1)
 
     return dictionary
+
+def create_multiple_subsampling(data, stride, is_velocity=False):
+    new_length = data.shape[0]//stride if not is_velocity else data.shape[0]//stride-1
+    data_multisubs = np.zeros(
+        (stride, new_length, data.shape[1]),
+        dtype=np.float32
+    )
+    for start_idx in range(stride):
+        if is_velocity:
+            if start_idx < stride-1:
+                data_multisubs[start_idx] = data[start_idx+1:start_idx-stride+1].reshape(
+                    new_length, stride, -1
+                ).sum(axis=1)
+            else:
+                data_multisubs[start_idx] = data[start_idx+1:].reshape(
+                    new_length, stride, -1
+                ).sum(axis=1)
+        else:
+            data_multisubs[start_idx] = data[start_idx::stride]
+    return data_multisubs
