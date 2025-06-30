@@ -1,28 +1,24 @@
-# Modelling hippocampal neurons of animals navigating in VR with recurrent neural networks
-### Marco P. Abrate, Daniel Liu
-
+# Modelling hippocampal neurons of animals <br> navigating in VR with recurrent neural networks
+### Marco P. Abrate, Daniel Liu &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; University College London (UCL)
 ---
-##### Outline
-Rat simulation:
-- Motion model (RatInABox)
-- Environment design (Blender)
-- Simulated rat vision (ratvision)
 
-Vision autoencoder
+#### Outline
+**Part 1: Rat simulation in 3D**
+- Motion model with `RatInABox`
 
-Hippocampus model (RNN):
-- RNN definition
-- Data loading
-- Training
+- Environment design
 
-Hidden state representations analysis:
+- Simulated rat vision with `ratvision`
+
+**Part 2: Vision autoencoder**
+
+**Part 3: Hippocampus model with RNN**
+
+**Part 4: Hidden state representations analysis**
 - Rate maps
+
 - Polar maps
+
 - Quantitive metrics
-- Comparison with real data
 
-### Rat simulation
-
-Autoencoder data download link: https://drive.google.com/file/d/1NxdqNRT-DeLfAPlCeVp8AAkP2JEREL31/view?usp=sharing
-RNN data download link: https://drive.google.com/file/d/1RV0CTZJYINPwVd9V42Bf96frj86uTxUS/view?usp=sharing
-
+- Comparison with *in vivo* recordings

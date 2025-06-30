@@ -1,0 +1,121 @@
+FPS: 10
+SECONDS: 720
+
+N_PLACE_CELLS: 150
+PLACE_MIN_WIDTH: 0.1
+PLACE_MAX_WIDTH: 0.45
+
+N_HD_CELLS: 150
+HD_CELLS_DEGREE: 20
+
+FOV_DISTANCE:
+    - 0.0
+    - 0.1
+FOV_ANGLES:
+    - 0
+    - 120
+SPATIAL_RES: 0.04
+
+ENV_DIM: 0.625 # meters
+ENV_EPS: 0.005 # meters
+
+FRAME_DIM:
+    - 128 # X
+    - 64  # Y
+
+BEHAVIOURS:
+    cluster0:
+        SPEED_MEAN: 0.03794
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.5
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.6
+    cluster1:
+        SPEED_MEAN: 0.09087
+        SPEED_CT: 1.35
+        ROT_SPEED_STD: 0.667
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.6
+    cluster2:
+        SPEED_MEAN: 0.0625
+        SPEED_CT: 2.0
+        ROT_SPEED_STD: 0.5
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.6
+    cluster3:
+        SPEED_MEAN: 0.08021
+        SPEED_CT: 1.35
+        ROT_SPEED_STD: 0.8334
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.4
+
+
+
+    crawl_new:
+        SPEED_MEAN: 0.03803 # m/s
+        SPEED_CT: 1.35
+        ROT_SPEED_STD: 0.25
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.5
+    crawl:
+        SPEED_MEAN: 0.04088
+        SPEED_CT: 1.35
+        ROT_SPEED_STD: 0.25
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.5
+    p13-17:
+        SPEED_MEAN: 0.05707
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.3334
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.5
+    p14-20:
+        SPEED_MEAN: 0.05504
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.3334
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.5
+    p18-30:
+        SPEED_MEAN: 0.05707
+        SPEED_CT: 2.0
+        ROT_SPEED_STD: 0.25
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.6
+    p21-28:
+        SPEED_MEAN: 0.05504
+        SPEED_CT: 2.0
+        ROT_SPEED_STD: 0.25
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.6
+    run:
+        SPEED_MEAN: 0.07966
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.6667
+        ROT_SPEED_CT: 0.075
+        THIGMOTAXIS: 0.4
+
+
+    pivot_old:
+        SPEED_MEAN: 0.00167
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.6667
+        ROT_SPEED_CT: 0.02
+        THIGMOTAXIS: 0.5
+    crawl_old:
+        SPEED_MEAN: 0.004
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.6667
+        ROT_SPEED_CT: 0.02
+        THIGMOTAXIS: 0.5
+    walk_old:
+        SPEED_MEAN: 0.025
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.6667
+        ROT_SPEED_CT: 0.05
+        THIGMOTAXIS: 0.5
+    run_old:
+        SPEED_MEAN: 0.08
+        SPEED_CT: 0.7
+        ROT_SPEED_STD: 0.6667
+        ROT_SPEED_CT: 0.08
+        THIGMOTAXIS: 0.5
