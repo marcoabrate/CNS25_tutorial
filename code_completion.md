@@ -142,3 +142,44 @@ optimizer.step()
 hidden_state = hidden_new.detach()
 ```
 
+### PART 4
+
+```python
+# YOUR CODE HERE (1)
+# calculate the activations for each cell, for each binned position
+activations = bin_data(pos, n_bins=n_bins, limits=limits, weights=hidden_states[:,i])
+
+
+# YOUR CODE HERE (2)
+# obtain the rate map for each cell by dividing the activations by the occuopancy
+rate_maps[i,:,:] = np.divide(
+    activations, occupancy, where=occupancy!=0,
+    out=np.nan*np.ones_like(activations)
+)
+
+# YOUR CODE HERE (3)
+# calculate the activations for each cell, for each binned head direction
+activations = bin_data(
+    head_directions, n_bins=n_bins, limits=limits, weights=hidden_states[:,i]
+)
+
+# YOUR CODE HERE (4)
+# obtain the polar map for each cell by dividing the activations by the occuop
+polar_maps[i] = np.divide(
+    activations, occupancy, where=occupancy!=0,
+    out=np.nan*np.ones_like(activations)
+)
+
+# YOUR CODE HERE (5)
+# use the equation above, calculate the SI (assuming we are measuring in bits per second)
+si = np.sum(
+    _occ_prob[mask] * _rate[mask] * np.log2(_rate[mask] / _rate_mean)
+)
+
+si /= _rate_mean  # convert to bits per spike
+
+# YOUR CODE HERE (6)
+# calculate resultant vector as sum of cos & sin angles
+rv = np.sum(polar_map * np.exp(1j * bins))
+
+```
