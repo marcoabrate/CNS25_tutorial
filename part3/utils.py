@@ -44,6 +44,7 @@ def evaluate_rnn(
 
     dictionary = {
         'batch_losses': [],
+        'batch_io_dists': [],
         'hidden_states':[],
         'positions':[],
         'head_directions':[],
@@ -71,12 +72,13 @@ def evaluate_rnn(
             batch_losses = loss_fn(outputs, embs_labels)
 
             dictionary['batch_losses'].append(batch_losses.detach().item())
+            dictionary['batch_io_dists'].append(loss_fn(outputs, embs.to(device)).detach().item())
             
             if for_ratemaps:
-                dictionary['hidden_states'].append(hidden_all_new.detach().cpu().numpy())                           # (fps, hidden_dim)
-                dictionary['positions'].append(pos.squeeze(dim=0).detach().cpu().numpy())                # (fps, 2)
-                dictionary['head_directions'].append(hds.squeeze(dim=0).detach().cpu().numpy())                # (fps, 2)
-                dictionary['outputs'].append(outputs.detach().cpu().numpy())            # (fps, emb_dim)
+                dictionary['hidden_states'].append(hidden_all_new.detach().cpu().numpy()) # (fps, hidden_dim)
+                dictionary['positions'].append(pos.squeeze(dim=0).detach().cpu().numpy()) # (fps, 2)
+                dictionary['head_directions'].append(hds.squeeze(dim=0).detach().cpu().numpy()) # (fps, 2)
+                dictionary['outputs'].append(outputs.detach().cpu().numpy()) # (fps, emb_dim)
                 dictionary['embs_labels'].append(embs_labels.detach().cpu().numpy())
     if for_ratemaps:
         for k in ['hidden_states', 'positions', 'head_directions', 'outputs', 'embs_labels']:
