@@ -223,9 +223,16 @@ def evaluate_rnn(
     return dictionary
 
 def check_if_contiguous(indices, tolerance=1):
+    '''Check if a list of 2D indices are contiguous in a grid within a given tolerance.
+    
+    Args:
+        indices (list of tuples): List of 2D indices (row, column) to check for contiguity.
+        tolerance (int): The maximum Manhattan distance allowed between indices to consider them contiguous.
+    
+    Returns:
+        bool: True if all indices are contiguous within the given tolerance, False otherwise.'''
+
     from collections import deque
-    # Check if a list of 2-dimensional indices are  with tolerance k.
-    # returns True if all indices are within k bins of each other (manhattan distance)
 
     if not indices:
         return False  # Empty list is not contiguous
