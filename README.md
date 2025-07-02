@@ -21,4 +21,4 @@
 
 - Quantitive metrics
 
-- Comparison with *in vivo* recordings
+- Applications
