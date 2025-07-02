@@ -208,7 +208,7 @@ def evaluate_rnn(
             batch_losses = loss_fn(outputs, embs_labels)
 
             dictionary['batch_losses'].append(batch_losses.detach().item())
-            dictionary['batch_io_dists'].append(loss_fn(outputs, embs.to(device)).detach().item())
+            dictionary['batch_io_dists'].append(loss_fn(outputs, embs.squeeze(dim=0).to(device)).detach().item())
             
             if for_ratemaps:
                 dictionary['hidden_states'].append(hidden_all_new.detach().cpu().numpy()) # (fps, hidden_dim)

@@ -1,5 +1,6 @@
 # Custom
 **/output
+*.npy
 .vscode
 
 # Byte-compiled / optimized / DLL files
