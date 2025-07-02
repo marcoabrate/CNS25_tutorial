@@ -221,3 +221,46 @@ def evaluate_rnn(
             dictionary[k] = np.concatenate(dictionary[k], axis=1)
 
     return dictionary
+
+def check_if_contiguous(indices, tolerance=1):
+    from collections import deque
+    # Check if a list of 2-dimensional indices are  with tolerance k.
+    # returns True if all indices are within k bins of each other (manhattan distance)
+
+    if not indices:
+        return False  # Empty list is not contiguous
+
+    index_set = set(indices)
+
+    # Directions within k bins
+    if tolerance == 1:
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    elif tolerance == 2:
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1), (0, 2), (0, -2), (2, 0), (-2, 0)]
+    else:
+        directions = []
+        for t in range(-tolerance, tolerance+1):
+            y1, y2 = tolerance - abs(t), -(tolerance-abs(t))
+            if y1 != 0: directions.append((t, y1))
+            if y2 != 0: directions.append((t, y2))
+            if y1 == 0: directions.append((t, 0))
+
+
+    # Start BFS from the first index
+    queue = deque([indices[0]])
+    visited = set([indices[0]])
+
+    while queue:
+        r, c = queue.popleft()
+
+        # Explore 4 possible directions
+        for dr, dc in directions:
+            nr, nc = r + dr, c + dc
+
+            # Check if the new position is in the given indices and not visited
+            if (nr, nc) in index_set and (nr, nc) not in visited:
+                visited.add((nr, nc))
+                queue.append((nr, nc))
+
+    # If all indices are visited, they are contiguous
+    return visited == index_set
