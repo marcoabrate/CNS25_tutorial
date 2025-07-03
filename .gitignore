@@ -1,6 +1,8 @@
 # Custom
+**/.DS_Store
 **/output
 *.npy
+*.pptx
 .vscode
 
 # Byte-compiled / optimized / DLL files
